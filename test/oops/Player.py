@@ -3,17 +3,18 @@ import sys
 
 class Player (pygame.Rect):
     speed = 10
-    color = (0,0,0,0)
+    color = (255,0,0)
     def __init__(self,screen,width, height):
         super().__init__(width // 2, height // 2, 50, 50)
         self.WIDTH = width
         self.HEIGHT = height
         self.screen = screen
 
-    def start(self):
+    def start(self, enemy_list):
         print("start")
-        self.image = pygame.image.load("asset/player.png")
-        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        self.enemy_list = enemy_list
+        # self.image = pygame.image.load("asset/player.png")
+        # self.image = pygame.transform.scale(self.image, (self.width, self.height))
     
     def update(self):
         keys = pygame.key.get_pressed()
@@ -34,6 +35,11 @@ class Player (pygame.Rect):
         # print(self.width)
         self.clamp_ip(0,0,self.WIDTH,self.HEIGHT)
 
+        if self.collidelist(self.enemy_list) > -1:
+            print('done')
+        
+
     def draw(self):
-        pygame.draw.rect(self.screen, self.color, self, border_radius=999)
-        self.screen.blit(self.image, (self.x,self.y))
+        # pygame.draw.rect(self.screen, self.color, self, border_radius=999)
+        pygame.draw.rect(self.screen, self.color, self)
+        # self.screen.blit(self.image, (self.x,self.y))

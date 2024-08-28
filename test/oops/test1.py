@@ -22,9 +22,16 @@ black = (0,0,0)
 
 # Set up player
 player = Player(screen, width, height)
-player.start()
+# enemy = Enemy(screen, width, height)
 
-enemy = Enemy(screen, width, height)
+enemy1 = Enemy(screen, 100, 200, width, height, [10,15],player)
+enemy2 = Enemy(screen, 300, 100, width, height, [16,15],player)
+enemy3 = Enemy(screen, 100, 500, width, height, [15,17],player)
+
+enemy_list = [enemy1,enemy2,enemy3]
+enemy_col_list = [enemy1.circle, enemy2.circle, enemy3.circle]
+
+player.start(enemy_col_list)
 
 # Game loop
 while True:
@@ -35,12 +42,16 @@ while True:
 
     player.update()
 
+    for enemy in enemy_list:
+        enemy.update()
+
     # Fill screen
     screen.fill(white)
 
     # Draw player
     player.draw()
-    enemy.draw()
+    for enemy in enemy_list:
+        enemy.draw()
 
     # Update display
     pygame.display.update()
