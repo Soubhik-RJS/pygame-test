@@ -5,7 +5,7 @@ class Player (pygame.Rect):
     speed = 10
     color = (255,0,0)
     def __init__(self,screen,width, height):
-        super().__init__(width // 2, height // 2, 50, 50)
+        super().__init__(width // 2, height // 2, 100, 100)
         self.WIDTH = width
         self.HEIGHT = height
         self.screen = screen
@@ -35,8 +35,8 @@ class Player (pygame.Rect):
         # print(self.width)
         self.clamp_ip(0,0,self.WIDTH,self.HEIGHT)
 
-        if self.collidelist(self.enemy_list) > -1:
-            print('done')
+        # if self.collidelist(self.enemy_list) > -1:
+        #     print('done')
         
 
     def draw(self):

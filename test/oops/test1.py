@@ -42,8 +42,8 @@ while True:
 
     player.update()
 
-    for enemy in enemy_list:
-        enemy.update()
+    # for enemy in enemy_list:
+    #     enemy.update()
 
     # Fill screen
     screen.fill(white)
@@ -51,6 +51,7 @@ while True:
     # Draw player
     player.draw()
     for enemy in enemy_list:
+        enemy.update()
         enemy.draw()
 
     # Update display

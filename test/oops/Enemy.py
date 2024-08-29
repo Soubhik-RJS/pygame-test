@@ -25,10 +25,18 @@ class Enemy:
             self.speed[0] = -self.speed[0]
         if self.circle.top <= 0 or self.circle.bottom >= self.HEIGHT:
             self.speed[1] = -self.speed[1]
-        if abs(self.circle.x - self.player.x) < self.player.size[0] and abs(self.circle.y - self.player.y) < self.player.size[0]:
-            self.speed[0] = -self.speed[0]
+
+        # if abs(self.circle.x - self.player.x) < self.player.size[0] and abs(self.circle.y - self.player.y) < self.player.size[0]:
+        #     self.speed[0] = -self.speed[0]
         # if self.circle.top <= self.player.top or self.circle.bottom >= self.player.bottom:
         #     self.speed[1] = -self.speed[1]
+
+        if self.circle.colliderect(self.player):
+            if self.circle.left <= self.player.left or self.circle.right >= self.player.right:
+                self.speed[0] = -self.speed[0]
+            if self.circle.top <= self.player.top or self.circle.bottom >= self.player.bottom:
+                self.speed[1] = -self.speed[1]
+
 
     def draw(self):
         pygame.draw.circle(self.screen, self.color, self.circle.center, self.radius)
