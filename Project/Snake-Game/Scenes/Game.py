@@ -13,15 +13,16 @@ class Game(Scene):
         self.HEIGTH = HEIGTH
         self.color = self.BLACK
         self.gameOver = gameOver
-        self.point = 0
     
     def start(self):
+        self.point = 0
         print('game scene start',self.point)
         self.snake = Snake(self.screen,self.WIDTH, self.HEIGTH, self.GREEN, self.gameOver)
         self.apple = Apple(self.screen, self.WIDTH, self.HEIGTH, self.RED, self.snake)
     
     def event(self, e):
         self.snake.event(e)
+        self.apple.event(e)
 
     def update(self):
         self.snake.update()

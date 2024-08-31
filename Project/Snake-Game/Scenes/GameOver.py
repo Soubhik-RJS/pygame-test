@@ -20,8 +20,6 @@ class GameOver(Scene):
     def event(self, e):
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_KP_ENTER:
-                self.game.reset()
-                self.game.start()
                 self.game.run()
     
     def draw(self):
