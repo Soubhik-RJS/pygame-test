@@ -16,6 +16,8 @@ class GameOver(Scene):
     
     def start(self):
         print("game over")
+        with open('save.txt','r') as f:
+            self.high_score = f.read()
 
     def event(self, e):
         if e.type == pygame.KEYDOWN:
@@ -23,8 +25,9 @@ class GameOver(Scene):
                 self.game.run()
     
     def draw(self):
-        self.text_screen("Game Over", self.WHITE, self.WIDTH/2, self.HEIGTH/2-20, True)
-        self.text_screen("press enter to restart", self.WHITE, self.WIDTH/2, self.HEIGTH/2+20, True)
+        self.text_screen("Game Over", self.WHITE, self.WIDTH/2, self.HEIGTH/2-30, True)
+        self.text_screen(f"Your Score: {self.game.point} High Score: {self.high_score}", self.WHITE, self.WIDTH/2, self.HEIGTH/2, True)
+        self.text_screen("press enter to restart", self.WHITE, self.WIDTH/2, self.HEIGTH/2+30, True)
 
     def text_screen(self,text, color, x, y, center=False):
         screen_text = self.font.render(text, True, color)

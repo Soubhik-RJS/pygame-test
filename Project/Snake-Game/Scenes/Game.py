@@ -29,12 +29,13 @@ class Game(Scene):
         self.point += self.apple.update()
 
         if self.snake.x < 0 or self.snake.x > self.WIDTH or self.snake.y < 0 or self.snake.y > self.HEIGTH:
-            # self.snake.snake_length = 1
-            # self.snake.x,self.snake.y = self.WIDTH/2,self.HEIGTH/2
-            # self.snake.velocity = [0,0]
-            # self.point = 0
-            # print(self.snake.x,self.snake.snake_length)
-            # self.__init__(self.screen,self.clock,self.fps,self.font,self.WIDTH,self.HEIGTH,self.gameOver)
+            with open("save.txt", 'r') as f:
+                try:
+                    if self.point > int(f.read()):
+                        with open("save.txt", 'w') as f:
+                            f.write(str(self.point))
+                except Exception as e:
+                    print(e)
             self.gameOver.run()
 
     def draw(self):
