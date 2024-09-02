@@ -17,6 +17,8 @@ class MultiGame(Scene):
         self.speed = 10
     
     def start(self):
+        self.player_left_score = 0
+        self.player_right_score = 0
         print('game scene start')
         self.player_left = Player_Left(self.screen,self.WIDTH, self.HEIGTH, self.BLACK)
         self.player_right = Player_Right(self.screen,self.WIDTH, self.HEIGTH, self.BLACK)
@@ -42,13 +44,19 @@ class MultiGame(Scene):
         if self.ball.left <= 0 or self.ball.right >= self.WIDTH:
             # self.ball.x,self.ball.y = self.WIDTH/2-15,self.HEIGTH/2-15
             # self.ball.velocity = [0,0]
+            self.gameOver.screen_from ="multigame"
             self.gameOver.run()
 
     
         
         self.player_left.update()
         self.player_right.update()
-        self.ball.update()
+        ball = self.ball.update()
+
+        if ball["name"] == "right":
+            self.player_right_score += ball["score"]
+        elif ball["name"] == "left":
+            self.player_left_score += ball["score"]
         
 
 
@@ -56,7 +64,8 @@ class MultiGame(Scene):
         #     self.gameOver.run()
 
     def draw(self):
-        self.text_screen(f"Score: {self.ball.point}",self.BLACK,self.WIDTH/2,30,True)
+        self.text_screen(f"Score: {self.player_left_score}",self.BLACK,5,5)
+        self.text_screen(f"Score: {self.player_right_score}",self.BLACK,self.WIDTH-150,5)
         self.player_left.darw()
         self.player_right.darw()
         self.ball.draw()

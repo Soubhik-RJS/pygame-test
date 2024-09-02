@@ -15,7 +15,6 @@ class Ball(pygame.Rect):
         # Variable
         self.speed = [5,5]
         self.velocity = [0,0]
-        self.point = 0
 
 
     def update(self):
@@ -40,18 +39,57 @@ class Ball(pygame.Rect):
         #     # self.speed[1] += 1
         #     self.point += 1
 
-        if self.colliderect(self.player_left) or self.colliderect(self.player_right):
+        # if self.colliderect(self.player_left) or self.colliderect(self.player_right):
+        #     self.velocity[0] = -self.velocity[0]
+        #     # self.speed[0] += 1
+        #     # self.speed[1] += 1
+        #     self.point += 1
+
+        # print(self.player_right.height)  
+        # if (self.player_right.x <= self.x <= self.player_right.x + self.player_right.width
+        # and self.player_right.y <= self.y <= self.player_right.y + self.player_right.height):
+        #     self.velocity[0] = -self.velocity[0]
+        #     self.point += 1
+
+        # if (abs(self.x-self.player_right.x)<self.player_right.width and abs(self.y-self.player_right.y)<self.player_right.height
+        #     or abs(self.x-self.player_left.x)<self.player_left.width and abs(self.y-self.player_left.y)<self.player_left.height):
+        #     self.velocity[0] = -self.velocity[0]
+        #     self.point += 1
+
+        # Check collision with right player
+        if (self.x + self.width > self.player_right.x and
+            self.x < self.player_right.x + self.player_right.width and
+            self.y + self.height > self.player_right.y and
+            self.y < self.player_right.y + self.player_right.height):
+            
             self.velocity[0] = -self.velocity[0]
-            # self.speed[0] += 1
-            # self.speed[1] += 1
-            self.point += 1
-        
+            
+            # Adjust the ball's position to be just outside the player's boundary
+            self.x = self.player_right.x - self.width - 1  # Placing ball just outside the right player's left edge
+            
+            return {"name": "right", "score": 1}
+
+        # Check collision with left player
+        elif (self.x < self.player_left.x + self.player_left.width and
+            self.x + self.width > self.player_left.x and
+            self.y + self.height > self.player_left.y and
+            self.y < self.player_left.y + self.player_left.height):
+            
+            self.velocity[0] = -self.velocity[0]
+            
+            # Adjust the ball's position to be just outside the player's boundary
+            self.x = self.player_left.x + self.player_left.width + 1  # Placing ball just outside the left player's right edge
+            
+            return {"name": "left", "score": 1}
+
+
 
         # if ((self.left <= self.player_left.right and abs(self.y-self.player_left.y) < self.player_left.size[1])
         #     or 
         #     (self.right >= self.player_right.left and abs(self.y - self.player_right.y) < self.player_right.size[1])):
         #         self.velocity[0] = -self.velocity[0]
         #         self.point += 1
+        return {"name": "none", "score": 0}
 
     
     def draw(self):

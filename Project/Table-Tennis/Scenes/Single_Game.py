@@ -1,5 +1,6 @@
 import pygame
 import sys
+import json
 from Scenes.Scene import Scene
 from GameObject.Player_Left import Player_Left
 from GameObject.Player_Right import Player_Right
@@ -15,6 +16,7 @@ class SingleGame(Scene):
         # self.color = self.BLACK
         self.gameOver = gameOver
         self.speed = 10
+        self.score = 0
     
     def start(self):
         print('game scene start')
@@ -37,21 +39,27 @@ class SingleGame(Scene):
         if self.ball.left <= 0 or self.ball.right >= self.WIDTH:
             # self.ball.x,self.ball.y = self.WIDTH/2-15,self.HEIGTH/2-15
             # self.ball.velocity = [0,0]
+            try:
+                with open('save.json', 'r') as file:
+                    save = file.read()
+                    save = json.loads(save)
+                    if int(self.score) > save["singlegame"]["score"]:
+                        with open("save.json",'w') as file:
+                            save["singlegame"]["score"] = int(self.score)
+                            file.write(json.dumps(save))
+            except Exception as e:
+                print(e)
+            self.gameOver.screen_from ="singlegame"
             self.gameOver.run()
-
     
         
         self.player_left.update()
         self.player_right.update()
-        self.ball.update()
+        self.score += self.ball.update()['score']
         
 
-
-        # if self.player.colliderect(self.enemy):
-        #     self.gameOver.run()
-
     def draw(self):
-        self.text_screen(f"Score: {self.ball.point}",self.BLACK,self.WIDTH/2,30,True)
+        self.text_screen(f"Score: {self.score}",self.BLACK,self.WIDTH/2,30,True)
         self.player_left.darw()
         self.player_right.darw()
         self.ball.draw()
