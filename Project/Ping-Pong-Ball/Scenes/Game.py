@@ -2,26 +2,27 @@ import pygame
 import sys
 from Scenes.Scene import Scene
 from GameObject.Player import Player
-from GameObject.Enemy import Enemy
+from GameObject.Ball import Ball
 from GameObject.Wall import Wall
+from GameObject.Block import Block
 
 # Level Map (W = Wall, P = Player)
 level_map = [
-    "W        W         W",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "W                  W",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "                    ",
-    "W        W         W",
+    "BRBGB B B              ",
+    "                       ",
+    "B B BRBUB               ",
+    "                       ",
+    "    B                  ",
+    "                       ",
+    "                       ",
+    "W                     W",
+    "                       ",
+    "                       ",
+    "                       ",
+    "                       ",
+    "                       ",
+    "                       ",
+    "W        W            W",
 ]
 
 class Game(Scene):
@@ -33,30 +34,56 @@ class Game(Scene):
         self.HEIGTH = HEIGTH
         # self.color = self.BLACK
         self.gameOver = gameOver
-        self.Level_Layout = []
+        self.Wall_Layout = []
+        self.Block_Layout = []
     
     def start(self):
         print('game scene start')
         for y, row in enumerate(level_map):
             for x, tile in enumerate(row):
                 if tile == 'W':
-                    self.Level_Layout.append(Wall(self.screen, x, y, self.BLUE))
+                    self.Wall_Layout.append(Wall(self.screen, x, y, self.BLUE))
+                if tile == 'R':
+                    self.Block_Layout.append(Block(self.screen, x, y, self.RED))
+                if tile == 'G':
+                    self.Block_Layout.append(Block(self.screen, x, y, self.GREEN))
+                if tile == 'B':
+                    self.Block_Layout.append(Block(self.screen, x, y, self.BLUE))
         self.player = Player(self.screen,self.WIDTH, self.HEIGTH, self.RED)
-        self.enemy = Enemy(self.screen, self.WIDTH, self.HEIGTH, self.BLACK)
+        self.ball = Ball(self.screen, self.WIDTH, self.HEIGTH, self.BLACK, self.Block_Layout, self.Wall_Layout)
     
-    def update(self):
-        self.player.update()
+    def event(self, e):
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_ESCAPE:
+                self.gameOver.run()
 
-        if self.player.colliderect(self.enemy):
-            self.gameOver.run()
+    def update(self):
+
+        self.player.update()
+        i = self.ball.update()
+        
+        # destory blocks
+        if i >= 0:
+            del self.Block_Layout[i]
+
+
+        # if self.player.colliderect(self.enemy):
+        #     self.gameOver.run()
 
     def draw(self):
-        self.text_screen("MyGame Started",self.BLACK,5,5)
-        self.player.darw()
-        self.enemy.draw()
+        # self.text_screen("MyGame Started",self.BLACK,5,5)
         
-        for wall in self.Level_Layout:
+        self.player.darw()
+        self.ball.draw()
+        
+        for wall in self.Wall_Layout:
             wall.draw()
+        for block in self.Block_Layout:
+            block.draw()
+        
+        # win
+        if len(self.Block_Layout) <= 0:
+            self.text_screen("Game Winner",self.BLACK,self.WIDTH/2,self.HEIGTH/2,True)
 
     
     def text_screen(self,text, color, x, y, center=False):

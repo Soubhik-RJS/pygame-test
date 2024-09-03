@@ -8,7 +8,7 @@ from Scenes.GameOver import GameOver
 pygame.init()
 
 # Set up display
-WIDTH, HEIGTH = 800, 600
+WIDTH, HEIGTH = 900, 600
 screen = pygame.display.set_mode((WIDTH, HEIGTH))
 pygame.display.set_caption('Ping Pong Ball')
 clock = pygame.time.Clock()
