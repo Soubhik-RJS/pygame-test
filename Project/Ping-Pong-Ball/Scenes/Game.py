@@ -3,6 +3,26 @@ import sys
 from Scenes.Scene import Scene
 from GameObject.Player import Player
 from GameObject.Enemy import Enemy
+from GameObject.Wall import Wall
+
+# Level Map (W = Wall, P = Player)
+level_map = [
+    "W        W         W",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "W                  W",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "W        W         W",
+]
 
 class Game(Scene):
 
@@ -13,9 +33,14 @@ class Game(Scene):
         self.HEIGTH = HEIGTH
         # self.color = self.BLACK
         self.gameOver = gameOver
+        self.Level_Layout = []
     
     def start(self):
         print('game scene start')
+        for y, row in enumerate(level_map):
+            for x, tile in enumerate(row):
+                if tile == 'W':
+                    self.Level_Layout.append(Wall(self.screen, x, y, self.BLUE))
         self.player = Player(self.screen,self.WIDTH, self.HEIGTH, self.RED)
         self.enemy = Enemy(self.screen, self.WIDTH, self.HEIGTH, self.BLACK)
     
@@ -29,6 +54,9 @@ class Game(Scene):
         self.text_screen("MyGame Started",self.BLACK,5,5)
         self.player.darw()
         self.enemy.draw()
+        
+        for wall in self.Level_Layout:
+            wall.draw()
 
     
     def text_screen(self,text, color, x, y, center=False):
