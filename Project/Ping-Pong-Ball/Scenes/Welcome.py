@@ -13,10 +13,14 @@ class Welcome(Scene):
         self.game_scene = game_scene
         self.font_sm = pygame.font.SysFont(None, 30)
         self.start_btn_color = (30, 150, 0)
+        self.level_btn_color = (80, 80, 80)
         self.ui = 'home'
+        self.last_level = 1
     
     def start(self):
         print('welcome scene start')
+        with open('save.txt') as file:
+            self.last_level = int(file.read())
     
     def event(self, e):
         # if e.type == pygame.KEYDOWN:
@@ -27,23 +31,48 @@ class Welcome(Scene):
             if self.ui == "home":
                 if self.start_btn.collidepoint(e.pos):
                     print("start")
+                if self.continue_btn.collidepoint(e.pos):
+                    print("continue")
                 if self.level_btn.collidepoint(e.pos):
                     self.ui = "level"
+
             elif self.ui == 'level':
                 if self.back_btn.collidepoint(e.pos):
                     self.ui = "home"
 
     def draw(self):
         if self.ui == "home":
-            self.text_screen("Welcome to Ping Pong Ball",self.BLACK,self.WIDTH/2,self.HEIGTH/2-40,True)
+            self.text_screen("Welcome to Ping Pong Ball",self.BLACK,self.WIDTH/2,30,True)
             # self.text_screen("enter space to start",self.BLACK,self.WIDTH/2,self.HEIGTH/2+20,True)
-            self.start_btn = self.draw_button("Start", self.start_btn_color, (self.WIDTH/2-100, self.HEIGTH/2, 200, 50))
-            self.level_btn = self.draw_button("Level", self.BLACK, (self.WIDTH/2-100, self.HEIGTH/2+20+50, 200, 50))
+            self.start_btn = self.draw_button("Start", self.start_btn_color, (self.WIDTH/2-100, self.HEIGTH/2-20-50, 200, 50))
+            self.continue_btn = self.draw_button("Continue", self.start_btn_color, (self.WIDTH/2-100, self.HEIGTH/2, 200, 50))
+            self.level_btn = self.draw_button("Levels", self.BLACK, (self.WIDTH/2-100, self.HEIGTH/2+20+50, 200, 50))
         elif self.ui == 'level':
             self.screen.fill(self.BLACK)
-            self.text_screen("All Levels",self.WHITE,self.WIDTH/2,self.HEIGTH/2-40,True)
+            self.text_screen("All Levels",self.WHITE,self.WIDTH/2,30,True)
             # self.text_screen("enter space to start",self.BLACK,self.WIDTH/2,self.HEIGTH/2+20,True)
-            self.back_btn = self.draw_button("Back", self.RED, (self.WIDTH/2-100, self.HEIGTH/2, 200, 50))
+            self.back_btn = self.draw_button("Back", self.RED, (10, 10, 70, 40))
+
+            btn_color = []
+            for i in range(10):
+                if self.last_level >= i+1:
+                    btn_color.append(self.start_btn_color)
+                else:
+                    btn_color.append(self.level_btn_color)
+
+
+            # 1st row
+            self.btn_level_1 = self.draw_button("1", btn_color[0], (self.WIDTH/2-(40+150+100), self.HEIGTH/2-50-20, 100, 100))
+            self.btn_level_2 = self.draw_button("2", btn_color[1], (self.WIDTH/2-(20+150), self.HEIGTH/2-50-20, 100, 100))
+            self.btn_level_3 = self.draw_button("3", btn_color[2], (self.WIDTH/2-50, self.HEIGTH/2-50-20, 100, 100))
+            self.btn_level_4 = self.draw_button("4", btn_color[3], (self.WIDTH/2+(20+50), self.HEIGTH/2-50-20, 100, 100))
+            self.btn_level_5 = self.draw_button("5", btn_color[4], (self.WIDTH/2+(40+150), self.HEIGTH/2-50-20, 100, 100))
+            # 2nd row
+            self.btn_level_6 = self.draw_button("6", btn_color[5], (self.WIDTH/2-(40+150+100), self.HEIGTH/2+50+20, 100, 100))
+            self.btn_level_7 = self.draw_button("7", btn_color[6], (self.WIDTH/2-(20+150), self.HEIGTH/2+50+20, 100, 100))
+            self.btn_level_8 = self.draw_button("8", btn_color[7], (self.WIDTH/2-50, self.HEIGTH/2+50+20, 100, 100))
+            self.btn_level_9 = self.draw_button("9", btn_color[8], (self.WIDTH/2+(20+50), self.HEIGTH/2+50+20, 100, 100))
+            self.btn_level_10 = self.draw_button("10", btn_color[9], (self.WIDTH/2+(40+150), self.HEIGTH/2+50+20, 100, 100))
 
     
     def text_screen(self,text, color, x, y, center=False):
