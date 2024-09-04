@@ -31,10 +31,10 @@ class Welcome(Scene):
         if e.type == pygame.MOUSEBUTTONDOWN:
             if self.ui == "home":
                 if self.start_btn.collidepoint(e.pos):
-                    print("start")
+                    self.game_scene.set_level = 1
                     self.game_scene.run()
                 if self.continue_btn.collidepoint(e.pos):
-                    print("continue")
+                    self.game_scene.set_level = 2
                     self.game_scene.run()
                 if self.level_btn.collidepoint(e.pos):
                     self.ui = "level"
@@ -45,6 +45,7 @@ class Welcome(Scene):
                 for i in range(len(self.btn_level)):
                     if self.btn_level[i].collidepoint(e.pos):
                         # print(f"Btn {i+1} is clicked")
+                        self.game_scene.set_level = i+1
                         self.game_scene.run()
 
     def draw(self):

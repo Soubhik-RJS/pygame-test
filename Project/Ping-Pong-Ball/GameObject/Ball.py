@@ -17,7 +17,7 @@ class Ball(pygame.Rect):
         self.player = player
         # var
         self.speed = 5
-        self.velocity = [-self.speed,-self.speed]
+        self.velocity = [0,0]
     
     def collide(self,blocks):
         i = self.collidelist(blocks)

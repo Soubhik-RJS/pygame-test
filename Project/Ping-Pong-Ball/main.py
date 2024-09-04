@@ -3,6 +3,7 @@ import sys
 from Scenes.Welcome import Welcome
 from Scenes.Game import Game
 from Scenes.GameOver import GameOver
+from Scenes.Final import Final
 
 # Initialize Pygame
 pygame.init()
@@ -15,8 +16,10 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 40)
 fps = 60
 
+final = Final(screen,clock,fps,font,WIDTH,HEIGTH)
 gameOver = GameOver(screen,clock,fps,font,WIDTH,HEIGTH)
-game = Game(screen,clock,fps,font,WIDTH,HEIGTH,gameOver)
+game = Game(screen,clock,fps,font,WIDTH,HEIGTH,gameOver, final)
 welcome = Welcome(screen,clock,fps,font,WIDTH,HEIGTH,game)
-gameOver.set_load_scene(game)
+gameOver.set_load_scene(welcome)
+final.set_load_scene(welcome)
 welcome.run()

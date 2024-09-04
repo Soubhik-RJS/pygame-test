@@ -8,7 +8,7 @@ class Player(pygame.Rect):
     speed = 10
 
     def __init__(self, screen, WIDTH, HEIGTH, color):
-        super().__init__(WIDTH/2, HEIGTH-20, self.size_x, self.size_y)
+        super().__init__(WIDTH/2-self.size_x/2, HEIGTH-20, self.size_x, self.size_y)
         self.screen = screen
         self.color = color
         self.WIDTH = WIDTH
