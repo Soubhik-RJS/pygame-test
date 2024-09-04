@@ -5,7 +5,7 @@ class Ball(pygame.Rect):
     
     radius= 10
 
-    def __init__(self, screen, WIDTH, HEIGTH, color, blocks, walls):
+    def __init__(self, screen, WIDTH, HEIGTH, color, blocks, walls, player):
         super().__init__(WIDTH/2,HEIGTH/2+100,20,20)
         self.screen = screen
         # self = pygame.draw.circle(screen,color,(WIDTH/2,HEIGTH/2+100),self.radius)
@@ -14,6 +14,7 @@ class Ball(pygame.Rect):
         self.color = color
         self.blocks = blocks
         self.walls = walls
+        self.player = player
         # var
         self.speed = 5
         self.velocity = [-self.speed,-self.speed]
@@ -51,10 +52,11 @@ class Ball(pygame.Rect):
 
         if self.left <= 0 or self.right >= self.WIDTH:
             self.velocity[0] = -self.velocity[0]
-        if self.top <= 0 or self.bottom >= self.HEIGTH:
+        if self.top <= 0:
             self.velocity[1] = -self.velocity[1]
 
         self.collide(self.walls)
+        self.collide([self.player])
         return self.collide(self.blocks)
         
     def draw(self):

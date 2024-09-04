@@ -1,5 +1,6 @@
 import pygame
 import sys
+import json
 from Scenes.Scene import Scene
 from GameObject.Player import Player
 from GameObject.Ball import Ball
@@ -7,23 +8,23 @@ from GameObject.Wall import Wall
 from GameObject.Block import Block
 
 # Level Map (W = Wall, P = Player)
-level_map = [
-    "BRBGB B B              ",
-    "                       ",
-    "B B BRBUB               ",
-    "                       ",
-    "    B                  ",
-    "                       ",
-    "                       ",
-    "W                     W",
-    "                       ",
-    "                       ",
-    "                       ",
-    "                       ",
-    "                       ",
-    "                       ",
-    "W        W            W",
-]
+# level_map = [
+#     "BRBGB B B              ",
+#     "                       ",
+#     "B B BRBUB              ",
+#     "                       ",
+#     "    B                  ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "                       ",
+#     "           P           ",
+# ]
 
 class Game(Scene):
 
@@ -36,13 +37,21 @@ class Game(Scene):
         self.gameOver = gameOver
         self.Wall_Layout = []
         self.Block_Layout = []
+        # self.level_map = []
+
+        # init levels
+        try:
+            with open('levels/2.txt','r') as file:
+                self.level_map = json.loads(file.read())
+        except Exception as e:
+            print(e)
     
     def start(self):
         print('game scene start')
-        for y, row in enumerate(level_map):
+        for y, row in enumerate(self.level_map):
             for x, tile in enumerate(row):
                 if tile == 'W':
-                    self.Wall_Layout.append(Wall(self.screen, x, y, self.BLUE))
+                    self.Wall_Layout.append(Wall(self.screen, x, y, (128, 44, 3)))
                 if tile == 'R':
                     self.Block_Layout.append(Block(self.screen, x, y, self.RED))
                 if tile == 'G':
@@ -50,7 +59,7 @@ class Game(Scene):
                 if tile == 'B':
                     self.Block_Layout.append(Block(self.screen, x, y, self.BLUE))
         self.player = Player(self.screen,self.WIDTH, self.HEIGTH, self.RED)
-        self.ball = Ball(self.screen, self.WIDTH, self.HEIGTH, self.BLACK, self.Block_Layout, self.Wall_Layout)
+        self.ball = Ball(self.screen, self.WIDTH, self.HEIGTH, self.BLACK, self.Block_Layout, self.Wall_Layout, self.player)
     
     def event(self, e):
         if e.type == pygame.KEYDOWN:
@@ -59,16 +68,14 @@ class Game(Scene):
 
     def update(self):
 
+        if self.ball.bottom >= self.HEIGTH:
+            self.gameOver.run()
+        
         self.player.update()
         i = self.ball.update()
-        
         # destory blocks
         if i >= 0:
             del self.Block_Layout[i]
-
-
-        # if self.player.colliderect(self.enemy):
-        #     self.gameOver.run()
 
     def draw(self):
         # self.text_screen("MyGame Started",self.BLACK,5,5)
