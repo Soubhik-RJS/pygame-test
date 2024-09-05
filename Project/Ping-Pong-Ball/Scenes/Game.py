@@ -54,6 +54,9 @@ class Game(Scene):
     
     def start(self):
         print('game scene start')
+        self.Wall_Layout = []
+        self.Block_Layout = []
+        self.isBallThrow = False
         for y, row in enumerate(self.levels[self.set_level-1]):
             for x, tile in enumerate(row):
                 if tile == 'W':
@@ -76,7 +79,10 @@ class Game(Scene):
                         self.run()
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_SPACE:
-                self.ball.velocity = [-self.ball.speed, -self.ball.speed]
+                # if self.ball.velocity == [0,0]:
+                if not self.isBallThrow:
+                    self.ball.velocity = [-self.ball.speed, -self.ball.speed]
+                    self.isBallThrow = True
 
     def update(self):
 
@@ -84,14 +90,19 @@ class Game(Scene):
             self.gameOver.run()
         
         self.player.update()
-        self.Block_Layout = self.ball.update()
+        i = self.ball.update()
+
+        # if self.ball.velocity == [0,0]:
+        if not self.isBallThrow:
+            self.ball.x = self.player.x+self.player.size_x/2
+            self.ball.y = self.player.y-self.player.size_y*2
 
         # destory blocks
         # print(self.Block_Layout)
         # i = self.ball.colliderect(self.Block_Layout[0])
         # print(i)
-        # if i >= 0:
-        #     del self.Block_Layout[i]
+        if i >= 0:
+            del self.Block_Layout[i]
 
     def draw(self):
         

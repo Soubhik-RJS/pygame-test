@@ -1,7 +1,7 @@
 [
-    "R B GRG G              ",
+    "BGRBRGRRG              ",
+    "BRGBGGRBR              ",
     "                       ",
-    "B G G B R              ",
     "                       ",
     "                       ",
     "                       ",

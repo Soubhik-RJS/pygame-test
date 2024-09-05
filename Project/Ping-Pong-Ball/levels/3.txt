@@ -1,9 +1,9 @@
 [
-    "R B GRG G              ",
+    "R B G G G              ",
     "                       ",
-    "B G G B R              ",
+    "B R G B R              ",
     "                       ",
-    "                       ",
+    "B G R B R              ",
     "                       ",
     "                       ",
     "                       ",
