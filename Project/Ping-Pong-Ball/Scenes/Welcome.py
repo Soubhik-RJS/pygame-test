@@ -34,7 +34,7 @@ class Welcome(Scene):
                     self.game_scene.set_level = 1
                     self.game_scene.run()
                 if self.continue_btn.collidepoint(e.pos):
-                    self.game_scene.set_level = 2
+                    self.game_scene.set_level = self.last_level
                     self.game_scene.run()
                 if self.level_btn.collidepoint(e.pos):
                     self.ui = "level"

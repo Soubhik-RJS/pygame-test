@@ -102,6 +102,8 @@ class Game(Scene):
         self.text_sm_screen(f"Level{self.set_level}",self.BLACK,self.WIDTH/2,20, True)
         # win
         if len(self.Block_Layout) <= 0:
+            with open("save.txt", 'w') as file:
+                file.write(str(self.set_level+1))
             if self.set_level == 10:
                 self.final.run()
             else:
