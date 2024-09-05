@@ -19,7 +19,36 @@ class Ball(pygame.Rect):
         self.speed = 5
         self.velocity = [0,0]
     
-    def collide(self,blocks):
+    def ifcollide_blocks(self,blocks):
+        i = self.collidelist(blocks)
+        if i >= 0:
+            # Determine the overlap distances
+            overlap_left = self.right - blocks[i].left
+            overlap_right = blocks[i].right - self.left
+            overlap_top = self.bottom - blocks[i].top
+            overlap_bottom = blocks[i].bottom - self.top
+            
+            # Determine the minimum overlap and reverse the appropriate velocity component
+            if min(overlap_left, overlap_right) < min(overlap_top, overlap_bottom):
+                # Horizontal collision
+                self.velocity[0] = -self.velocity[0]
+                # Correct position to prevent sticking
+                if overlap_left < overlap_right:
+                    self.right = blocks[i].left
+                else:
+                    self.left = blocks[i].right
+            else:
+                # Vertical collision
+                self.velocity[1] = -self.velocity[1]
+                # Correct position to prevent sticking
+                if overlap_top < overlap_bottom:
+                    self.bottom = blocks[i].top
+                else:
+                    self.top = blocks[i].bottom
+            del self.blocks[i]
+        
+    
+    def ifcollide_walls(self,blocks):
         i = self.collidelist(blocks)
         if i >= 0:
             # Determine the overlap distances
@@ -55,9 +84,18 @@ class Ball(pygame.Rect):
         if self.top <= 0:
             self.velocity[1] = -self.velocity[1]
 
-        self.collide(self.walls)
-        self.collide([self.player])
-        return self.collide(self.blocks)
+        self.ifcollide_walls(self.walls)
+        self.ifcollide_walls([self.player])
+        self.ifcollide_blocks(self.blocks)
+        return self.blocks
+
+        # all = self.walls+self.blocks+[self.player]
+
+        # # self.ifcollide(self.blocks)
+
+        # i = self.collidelist(self.blocks)
+        # if i >= 0:
+        #     print('col')
         
     def draw(self):
         pygame.draw.rect(self.screen,self.color,self,border_radius=999)

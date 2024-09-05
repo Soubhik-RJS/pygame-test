@@ -84,10 +84,14 @@ class Game(Scene):
             self.gameOver.run()
         
         self.player.update()
-        i = self.ball.update()
+        self.Block_Layout = self.ball.update()
+
         # destory blocks
-        if i >= 0:
-            del self.Block_Layout[i]
+        # print(self.Block_Layout)
+        # i = self.ball.colliderect(self.Block_Layout[0])
+        # print(i)
+        # if i >= 0:
+        #     del self.Block_Layout[i]
 
     def draw(self):
         

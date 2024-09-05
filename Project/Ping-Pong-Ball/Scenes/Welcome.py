@@ -45,8 +45,9 @@ class Welcome(Scene):
                 for i in range(len(self.btn_level)):
                     if self.btn_level[i].collidepoint(e.pos):
                         # print(f"Btn {i+1} is clicked")
-                        self.game_scene.set_level = i+1
-                        self.game_scene.run()
+                        if self.last_level >= i+1:
+                            self.game_scene.set_level = i+1
+                            self.game_scene.run()
 
     def draw(self):
         if self.ui == "home":
