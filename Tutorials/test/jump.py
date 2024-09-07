@@ -9,7 +9,7 @@ width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Basic Game')
 clock = pygame.time.Clock()
-fps = 30
+fps = 60
 
 # Set up colors
 white = (255,255,255)
@@ -62,6 +62,7 @@ while True:
         if keys[pygame.K_SPACE]:
             isJump = True
     else:
+        print(player_y)
         if jumpCount >= -10:
             player_y -= (jumpCount * abs(jumpCount)) * 0.5
             jumpCount -= 1
