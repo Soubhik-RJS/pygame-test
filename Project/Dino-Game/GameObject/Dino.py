@@ -58,6 +58,6 @@ class Dino(pygame.sprite.Sprite):
         self.rect.clamp_ip(0,0,self.WIDTH, self.HEIGTH)
 
 
-    def darw(self):
+    def draw(self):
         # pygame.draw.rect(self.screen, self.color, self)
         self.screen.blit(self.image, self.rect)
