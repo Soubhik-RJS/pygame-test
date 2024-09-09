@@ -24,13 +24,18 @@ class Game(Scene):
         self.time = 2000
         self.isstart = False
         self.game_over = False
+        self.clock_time = 0
 
-        self.START_EVENT = pygame.USEREVENT + 1
+        self.CLOCK_EVENT = pygame.USEREVENT + 1
         self.SPAWN_EVENT = pygame.USEREVENT + 2
+        pygame.time.set_timer(self.CLOCK_EVENT, 100)
         pygame.time.set_timer(self.SPAWN_EVENT, self.time)
         # self.enemy = Enemy(self.screen, self.WIDTH, self.HEIGTH/2, self.cactus_image, self.speed)
     
     def event(self, e):
+        if e.type == self.CLOCK_EVENT:
+            self.clock_time+=1
+
         if e.type == self.SPAWN_EVENT:
                 self.cactus.append(Enemy(self.screen, self.WIDTH, self.HEIGTH/2, self.cactus_image, self.speed))
                 # self.speed += 1
@@ -56,12 +61,13 @@ class Game(Scene):
             if self.dino.rect.collidelist(self.cactus) >= 0:
                 # print('game over')
                 self.game_over = True
+                pygame.time.set_timer(self.CLOCK_EVENT, 0)
 
         # if self.player.colliderect(self.enemy):
         #     self.gameOver.run()
 
     def draw(self):
-        # self.text_screen("MyGame Started",self.BLACK,5,5)
+        self.text_screen(f"{self.clock_time}",self.BLACK,5,5)
         self.dino.draw()
         for enemy in self.cactus:
             enemy.draw()
