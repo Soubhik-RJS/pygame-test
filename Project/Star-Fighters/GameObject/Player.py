@@ -1,15 +1,21 @@
 import pygame
 import sys
 
-class Player(pygame.Rect):
+class Player(pygame.sprite.Sprite):
 
-    size = 30
+    size = 50
     speed = 10
 
-    def __init__(self, screen, WIDTH, HEIGTH, color):
-        super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
+    def __init__(self, screen, WIDTH, HEIGTH):
+        # super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
+        self.image = pygame.image.load('./asset/player.png')
+        # Scale the image
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (WIDTH/2-self.size/2, HEIGTH-100)
+
         self.screen = screen
-        self.color = color
+        # self.color = color
         self.WIDTH = WIDTH
         self.HEIGTH = HEIGTH
     
@@ -19,17 +25,18 @@ class Player(pygame.Rect):
     def update(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w]:
-            self.move_ip(0,-self.speed)
-        if keys[pygame.K_s]:
-            self.move_ip(0,self.speed)
+        # if keys[pygame.K_w]:
+        #     self.rect.move_ip(0,-self.speed)
+        # if keys[pygame.K_s]:
+        #     self.rect.move_ip(0,self.speed)
         if keys[pygame.K_a]:
-            self.move_ip(-self.speed,0)
+            self.rect.move_ip(-self.speed,0)
         if keys[pygame.K_d]:
-            self.move_ip(self.speed,0)
+            self.rect.move_ip(self.speed,0)
         
-        self.clamp_ip(0,0,self.WIDTH, self.HEIGTH)
+        self.rect.clamp_ip(0,0,self.WIDTH, self.HEIGTH)
 
 
-    def darw(self):
-        pygame.draw.rect(self.screen, self.color, self)
+    def draw(self):
+        # pygame.draw.rect(self.screen, self.color, self)
+        self.screen.blit(self.image, self.rect)

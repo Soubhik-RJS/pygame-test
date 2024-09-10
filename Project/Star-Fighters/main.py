@@ -10,7 +10,7 @@ pygame.init()
 # Set up display
 WIDTH, HEIGTH = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGTH))
-pygame.display.set_caption('pygame-framework')
+pygame.display.set_caption('Star Fighters')
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 40)
 fps = 60
