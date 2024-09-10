@@ -4,6 +4,7 @@ from Scenes.Scene import Scene
 from GameObject.Player import Player
 from GameObject.Enemy import Enemy
 from GameObject.player_bullet import PlayerBullet
+from GameObject.enemy_explosion import EnemyExplosion
 
 class Game(Scene):
 
@@ -28,7 +29,7 @@ class Game(Scene):
         print('game scene start')
         self.player = Player(self.screen,self.WIDTH, self.HEIGTH)
         self.enemy = Enemy(self.screen, self.WIDTH, self.HEIGTH, self.BLACK)
-        # self.playerBullet = PlayerBullet(self.screen,0,0)
+        self.enemyExplosion = EnemyExplosion(self.screen,self.WIDTH/2,self.HEIGTH/2)
         self.playerBullets = []
     
     def event(self, e):
@@ -52,6 +53,9 @@ class Game(Scene):
             self.bg_y2 = -self.bg_height
 
         self.player.update()
+        self.enemyExplosion.update()
+
+
         i = 0
         while i < len(self.playerBullets):
             self.playerBullets[i].update()
@@ -69,6 +73,7 @@ class Game(Scene):
         # self.text_screen("MyGame Started",self.BLACK,5,5)
 
         self.player.draw()
+        self.enemyExplosion.draw()
 
         for playerBullet in self.playerBullets:
             playerBullet.update()
