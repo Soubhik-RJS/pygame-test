@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-class EnemyExplosion(pygame.sprite.Sprite):
+class Explosion(pygame.sprite.Sprite):
 
     size = 50
 
@@ -11,10 +11,10 @@ class EnemyExplosion(pygame.sprite.Sprite):
 
         # Load explosion animation frames
         self.frames = [
-            pygame.image.load(f'./asset/enemy_explosion/{i}.png') for i in range(1, 4)
+            pygame.image.load(f'./asset/explosion/{i}.png') for i in range(1, 4)
         ]
         self.current_frame = 0
-        self.frame_delay = 10  # Controls the speed of animation
+        self.frame_delay = 5  # Controls the speed of animation
         self.frame_counter = 0
 
         # Set the initial image and position
@@ -30,19 +30,20 @@ class EnemyExplosion(pygame.sprite.Sprite):
             self.current_frame += 1
             
             # sig
-            # if self.current_frame < len(self.frames):
-            #     self.image = pygame.transform.scale(self.frames[self.current_frame], (self.size, self.size))
-            # else:
-            #     # print('done')
-            #     self.kill()  # Remove the sprite when the animation is done
-            #     # self.current_frame = 0
-
+            if self.current_frame < len(self.frames):
+                self.image = pygame.transform.scale(self.frames[self.current_frame], (self.size, self.size))
+            else:
+                # return self
+                # print('done')
+                self.kill()  # Remove the sprite when the animation is done
+                # self.current_frame = 0
+        # return None
             # loop
-            if self.current_frame >= len(self.frames):
-                self.current_frame = 0  # Loop back to the first frame
+            # if self.current_frame >= len(self.frames):
+            #     self.current_frame = 0  # Loop back to the first frame
 
-            # Update the image to the current frame
-            self.image = pygame.transform.scale(self.frames[self.current_frame], (self.size, self.size))
+            # # Update the image to the current frame
+            # self.image = pygame.transform.scale(self.frames[self.current_frame], (self.size, self.size))
 
 
     def draw(self):

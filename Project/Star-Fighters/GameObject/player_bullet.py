@@ -5,10 +5,11 @@ class PlayerBullet(pygame.sprite.Sprite):
 
     size_x = 10
     size_y = 20
-    speed = 5
+    speed = 10
 
     def __init__(self, screen, x, y):
         # super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
+        super().__init__()
         self.image = pygame.image.load('./asset/player_bullet.png')
         # Scale the image
         self.image = pygame.transform.scale(self.image, (self.size_x, self.size_y))
@@ -26,6 +27,10 @@ class PlayerBullet(pygame.sprite.Sprite):
     def update(self):
         keys = pygame.key.get_pressed()
         self.rect.move_ip(0,-self.speed)
+        if self.rect.y <= 100:
+            return self
+        
+        return None
         
         # self.rect.clamp_ip(0,0,self.WIDTH, self.HEIGTH)
 

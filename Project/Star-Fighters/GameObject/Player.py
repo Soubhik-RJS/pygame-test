@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, screen, WIDTH, HEIGTH):
         # super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
+        super().__init__()
         self.image = pygame.image.load('./asset/player.png')
         # Scale the image
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
