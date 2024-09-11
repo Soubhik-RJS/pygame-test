@@ -6,7 +6,7 @@ class PlayerBullet(pygame.sprite.Sprite):
 
     size_x = 10
     size_y = 20
-    speed = 10
+    speed = 5
 
     def __init__(self, screen, x, y, enemys, collocations):
         # super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
