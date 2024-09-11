@@ -14,6 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
         self.rect.topleft = (WIDTH/2-self.size/2, HEIGTH-100)
+        self.mask = pygame.mask.from_surface(self.image)
+
+        self.max_health = 10
+        self.health = 10
 
         self.screen = screen
         # self.color = color
@@ -41,3 +45,18 @@ class Player(pygame.sprite.Sprite):
     def draw(self):
         # pygame.draw.rect(self.screen, self.color, self)
         self.screen.blit(self.image, self.rect)
+        self.draw_health_bar(self.screen, self.rect.x-self.size/2, self.rect.y+self.size+20, 100, 10, self.health, self.max_health)
+
+    def draw_health_bar(self, surface, x, y, width, height, current_health, max_health):
+        # Calculate health ratio
+        health_ratio = current_health / max_health
+        
+        # Background bar (gray)
+        pygame.draw.rect(surface, (128, 128, 128), (x, y, width, height))
+        
+        # Health bar (green)
+        pygame.draw.rect(surface, (0, 255, 0), (x, y, width * health_ratio, height))
+        
+        # Optional: Draw a border around the health bar
+        pygame.draw.rect(surface, (255, 255, 255), (x, y, width, height), 2)
+
