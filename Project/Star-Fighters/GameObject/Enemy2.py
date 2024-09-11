@@ -14,7 +14,7 @@ class Enemy2(pygame.sprite.Sprite):
         # Scale the image
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+        self.rect.topleft = (x * self.size, y * self.size)
         self.mask = pygame.mask.from_surface(self.image)
 
         self.health = 5

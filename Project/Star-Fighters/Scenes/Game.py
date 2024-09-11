@@ -1,15 +1,19 @@
 import pygame
 import sys
+import json
 from Scenes.Scene import Scene
 from GameObject.Player import Player
 from GameObject.Enemy1 import Enemy1
 from GameObject.Enemy2 import Enemy2
+from GameObject.Enemy3 import Enemy3
 from GameObject.player_bullet import PlayerBullet
 from GameObject.enemy_bullet import EnemyBullet
 from GameObject.explosion import Explosion
 from GameObject.collocation import Collocation
 
 class Game(Scene):
+
+    set_level = 1
 
     def __init__(self, screen, clock, fps, font, WIDTH, HEIGTH, gameOver):
         super().__init__(screen, clock, fps)
@@ -18,6 +22,8 @@ class Game(Scene):
         self.HEIGTH = HEIGTH
         # self.color = self.BLACK
         self.gameOver = gameOver
+        self.font_sm = pygame.font.SysFont(None, 30)
+        self.btn_color = (0, 36, 107)
 
         # Add background
         self.bg = pygame.image.load('./asset/background.jpg')
@@ -28,12 +34,23 @@ class Game(Scene):
         self.bg_y1 = 0
         self.bg_y2 = -self.bg_height
 
+        self.levels = []
+
+        for i in range(10):
+            try:
+                with open(f'levels/{i+1}.txt','r') as file:
+                    self.levels.append(json.loads(file.read()))
+            except Exception as e:
+                print(e)
+
         self.ENEMY_BULLET_EVENT = pygame.USEREVENT + 1
         self.CLOCK_EVENT = pygame.USEREVENT + 2
     
     def start(self):
-        print('game scene start')
+        # print(self.levels[self.set_level-1])
         self.game_over = False
+        self.win = False
+        self.win_restart = False
         pygame.time.set_timer(self.CLOCK_EVENT, 0)
         self.player = Player(self.screen,self.WIDTH, self.HEIGTH)
         # self.enemyExplosion = Explosion(self.screen,self.WIDTH/2,self.HEIGTH/2)
@@ -46,11 +63,23 @@ class Game(Scene):
         self.explosions = pygame.sprite.Group()
         self.collocations = pygame.sprite.Group()
 
-        self.enemys.add(Enemy1(self.screen, 50, 100, self.explosions))
-        self.enemys.add(Enemy1(self.screen, self.WIDTH/2, 100, self.explosions))
-        self.enemys.add(Enemy1(self.screen, self.WIDTH-100, 100, self.explosions))
+        for y, row in enumerate(self.levels[self.set_level-1]):
+            for x, tile in enumerate(row):
+                if tile == 'e':
+                    # print(f"{x}, {y}")
+                    self.enemys.add(Enemy1(self.screen, x, y, self.explosions))
+                if tile == 'E':
+                    # print(f"{x}, {y}")
+                    self.enemys.add(Enemy2(self.screen, x, y, self.explosions, self.player))
+                if tile == 'B':
+                    # print(f"{x}, {y}")
+                    self.enemys.add(Enemy3(self.screen, x, y, self.explosions, self.player))
 
-        self.enemys.add(Enemy2(self.screen, self.WIDTH/2, 50, self.explosions, self.player))
+        # self.enemys.add(Enemy1(self.screen, 50, 100, self.explosions))
+        # self.enemys.add(Enemy1(self.screen, self.WIDTH/2, 100, self.explosions))
+        # self.enemys.add(Enemy1(self.screen, self.WIDTH-100, 100, self.explosions))
+
+        # self.enemys.add(Enemy2(self.screen, self.WIDTH/2, 50, self.explosions, self.player))
 
     def event(self, e):
         if e.type == self.CLOCK_EVENT:
@@ -62,6 +91,16 @@ class Game(Scene):
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_SPACE:
                 self.playerBullets.add(PlayerBullet(self.screen,self.player.rect.x+self.player.size/2-5,self.player.rect.y, self.enemys, self.collocations))
+        if e.type == pygame.MOUSEBUTTONDOWN:
+            if self.win:
+                if self.next_btn.collidepoint(e.pos):
+                    if not self.set_level == 10:
+                        self.set_level += 1
+                        self.run()
+
+            if self.win_restart:
+                if self.restart_btn.collidepoint(e.pos):
+                    self.run()
 
     def update(self):
 
@@ -124,11 +163,42 @@ class Game(Scene):
         self.explosions.draw(self.screen)
         self.collocations.draw(self.screen)
 
+        self.text_sm_screen(f"Level{self.set_level}",self.WHITE,self.WIDTH/2,20, True)
+        # win
         if len(self.enemys) <= 0:
-            self.text_screen("WIN",self.WHITE,self.WIDTH/2, self.HEIGTH/2, True)
+            with open("save.txt", 'w') as file:
+                if not self.set_level == 10:
+                    file.write(str(self.set_level+1))
+                else:
+                    file.write(str(self.set_level))
+            if self.set_level == 10:
+                # self.final.run()
+                self.win_restart = True
+                self.text_screen("WINNER WINNER CHICKEN DINNER",self.WHITE,self.WIDTH/2,self.HEIGTH/2,True)
+                self.restart_btn = self.draw_button("Restart", self.btn_color, (self.WIDTH/2-75, self.HEIGTH/2+50, 150, 40))
+            else:
+                self.win = True
+                self.text_screen("WINNER WINNER CHICKEN DINNER",self.WHITE,self.WIDTH/2,self.HEIGTH/2,True)
+                self.next_btn = self.draw_button("Next", self.btn_color, (self.WIDTH/2-75, self.HEIGTH/2+50, 150, 40))
+                # self.ball.velocity =[0,0]
+
+            # self.text_screen("WIN",self.WHITE,self.WIDTH/2, self.HEIGTH/2, True)
 
     
     def text_screen(self,text, color, x, y, center=False):
         screen_text = self.font.render(text, True, color)
         text_rect = screen_text.get_rect(center=(x,y)) if center else [x,y]
         self.screen.blit(screen_text, text_rect)
+    
+    def text_sm_screen(self,text, color, x, y, center=False):
+        screen_text = self.font_sm.render(text, True, color)
+        text_rect = screen_text.get_rect(center=(x,y)) if center else [x,y]
+        self.screen.blit(screen_text, text_rect)
+
+    def draw_button(self, text, color, rect):
+        button_rect = pygame.Rect(rect)
+        pygame.draw.rect(self.screen, color, button_rect, border_radius=5)
+        text_surface = self.font_sm.render(text, True, self.WHITE)
+        text_rect = text_surface.get_rect(center=(rect[0] + rect[2] // 2, rect[1] + rect[3] // 2))
+        self.screen.blit(text_surface, text_rect)
+        return button_rect
