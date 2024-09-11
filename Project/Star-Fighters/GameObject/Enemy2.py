@@ -2,25 +2,26 @@ import pygame
 import sys
 from GameObject.explosion import Explosion
 
-class Enemy1(pygame.sprite.Sprite):
+class Enemy2(pygame.sprite.Sprite):
 
     size = 50
-    speed = 1
+    speed = 5
 
-    def __init__(self, screen, x, y, explosions):
+    def __init__(self, screen, x, y, explosions, player):
         # super().__init__(WIDTH/2, HEIGTH/2, self.size, self.size)
         super().__init__()
-        self.image = pygame.image.load('./asset/enemy_1.png')
+        self.image = pygame.image.load('./asset/enemy_2.png')
         # Scale the image
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.health = 3
+        self.health = 5
 
         self.screen = screen
         self.explosions = explosions
+        self.player = player
         # self.color = color
         # self.WIDTH = WIDTH
         # self.HEIGTH = HEIGTH
@@ -36,7 +37,8 @@ class Enemy1(pygame.sprite.Sprite):
         pass
         
     def event(self, e):
-        self.p_shift = False if self.p_shift else True
+        self.p_shift = True
+        # self.p_shift = False if self.p_shift else True
         # if e.type == self.MOVE_EVENT:
 
     def update(self):
@@ -45,11 +47,11 @@ class Enemy1(pygame.sprite.Sprite):
             self.kill()
         # self.rect.clamp_ip(0,0,self.WIDTH, self.HEIGTH)
 
-        # if self.rect.x == self.p1:
+        if self.rect.x == self.player.rect.x:
+            self.p_shift = False
+
         if self.p_shift:
-            self.move_towards_target(self.p2,self.rect.y)
-        else:
-            self.move_towards_target(self.p1,self.rect.y)
+            self.move_towards_target(self.player.rect.x, self.rect.y)
         
 
 
