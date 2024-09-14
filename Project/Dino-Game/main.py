@@ -17,6 +17,7 @@ fps = 60
 
 gameOver = GameOver(screen,clock,fps,font,WIDTH,HEIGTH)
 game = Game(screen,clock,fps,font,WIDTH,HEIGTH,gameOver)
-welcome = Welcome(screen,clock,fps,font,WIDTH,HEIGTH,game)
+# welcome = Welcome(screen,clock,fps,font,WIDTH,HEIGTH,game)
 gameOver.set_load_scene(game)
-welcome.run()
+# welcome.run()
+game.run()
