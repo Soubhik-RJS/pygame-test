@@ -31,7 +31,8 @@ class GameOver(Scene):
     def draw(self):
         self.text_screen("Game Over", self.WHITE, self.WIDTH/2, self.HEIGTH/2-40, True)
         if self.screen_from == "singlegame":
-            self.text_screen(f"Score: {self.singleGame.score} High Score: {self.save["singlegame"]["score"]}", self.WHITE, self.WIDTH/2, self.HEIGTH/2, True)
+            score = self.save["singlegame"]["score"]
+            self.text_screen(f"Score: {self.singleGame.score} High Score: {score}", self.WHITE, self.WIDTH/2, self.HEIGTH/2, True)
         elif self.screen_from == "multigame":
             if self.multiGame.player_left_score == self.multiGame.player_right_score:
                 win = "Match Draw"

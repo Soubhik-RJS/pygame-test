@@ -20,8 +20,12 @@ class Game(Scene):
         self.HEIGTH = HEIGTH
         # self.color = self.BLACK
         self.gameOver = gameOver
+        self.welcome = True
         # self.dino_image = "./asset/dinosaur.png"
         # self.cactus_image = "./asset/backup/cactus1.png"
+
+        self.start_image = pygame.image.load("./asset/start.png")
+        self.start_image = pygame.transform.scale(self.start_image, (55, 55))
 
         self.ground = pygame.image.load("./asset/ground.png")
         self.ground = pygame.transform.scale(self.ground, (self.WIDTH, 20))
@@ -87,10 +91,14 @@ class Game(Scene):
             # print(self.speed, self.time)
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_KP_ENTER:
-                self.run()
+                if self.game_over:
+                    self.run()
+                elif self.welcome:
+                    self.welcome = False
 
     def update(self):
-        if not self.game_over:
+
+        if not self.game_over and not self.welcome:
 
             self.bg_x1 -= self.speed
             self.bg_x2 -= self.speed
@@ -134,11 +142,13 @@ class Game(Scene):
         # self.screen.blit(self.ground, (0, (self.HEIGTH/2)+self.dino.size-20))
         self.screen.blit(self.ground, (self.bg_x1, (self.HEIGTH/2)+self.dino.size-20))
         self.screen.blit(self.ground, (self.bg_x2, (self.HEIGTH/2)+self.dino.size-20))
-
-        self.text_screen(f"{self.clock_time}",self.BLACK,5,5)
-        self.dino.draw()
-        self.enemys.draw(self.screen)
-        self.cloud.draw(self.screen)
+        if not self.welcome:
+            self.text_screen(f"{self.clock_time}",self.BLACK,5,5)
+            self.dino.draw()
+            self.enemys.draw(self.screen)
+            self.cloud.draw(self.screen)
+        else:
+            self.screen.blit(self.start_image, (self.dino.rect.x, self.dino.rect.y))
         # for enemy in self.cactus:
         #     enemy.draw()
         # pygame.draw.line(self.screen, self.BLACK, (0, (self.HEIGTH/2)+self.dino.size),(self.WIDTH, (self.HEIGTH/2)+self.dino.size),2)
