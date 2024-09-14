@@ -23,8 +23,9 @@ class Game(Scene):
         # self.dino_image = "./asset/dinosaur.png"
         # self.cactus_image = "./asset/backup/cactus1.png"
 
-        self.ground = pygame.image.load("./asset/game_over.png")
-        self.game_over_image = pygame.transform.scale(self.game_over_image, (250, 20))
+        self.ground = pygame.image.load("./asset/ground.png")
+        self.ground = pygame.transform.scale(self.ground, (self.WIDTH, 20))
+        self.ground_width, self.ground_height = self.ground.get_size()
 
         self.game_over_image = pygame.image.load("./asset/game_over.png")
         self.game_over_image = pygame.transform.scale(self.game_over_image, (250, 20))
@@ -40,6 +41,9 @@ class Game(Scene):
         self.isstart = False
         self.game_over = False
         self.clock_time = 0
+        # self.bg_speed = 2
+        self.bg_x1 = 0
+        self.bg_x2 = self.ground_width
 
         self.enemys = pygame.sprite.Group()
         self.cloud = pygame.sprite.Group()
@@ -59,20 +63,22 @@ class Game(Scene):
             self.cloud.add(Cloud(self.screen, self.WIDTH, random.randint(100, self.HEIGTH/2-100)))
 
         if e.type == self.SPAWN_EVENT:
-            # i = random.randint(1,6)
-            # if i == 1:
-            #     self.enemys.add(Cactus3(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            # elif i == 2:
-            #     self.enemys.add(Cactus4(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            # elif i == 3:
-            #     self.enemys.add(Cactus1(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            # elif i == 4:
-            #     self.enemys.add(Cactus2(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            # elif i == 5:
-            #     self.enemys.add(Cactus5(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            # else:
-            #     self.enemys.add(Dinobird(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
-            self.enemys.add(Dinobird(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            i = random.randint(1,6)
+            if i == 1:
+                self.enemys.add(Cactus3(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            elif i == 2:
+                self.enemys.add(Cactus4(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            elif i == 3:
+                self.enemys.add(Cactus1(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            elif i == 4:
+                self.enemys.add(Cactus2(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            elif i == 5:
+                self.enemys.add(Cactus5(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+            else:
+                self.enemys.add(Dinobird(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+
+            # self.enemys.add(Dinobird(self.screen, self.WIDTH, self.HEIGTH/2, self.speed))
+
             # self.cactus.append(Enemy(self.screen, self.WIDTH, self.HEIGTH/2, self.cactus_image, self.speed))
             # self.speed += 1
             # if self.time > 50:
@@ -85,6 +91,15 @@ class Game(Scene):
 
     def update(self):
         if not self.game_over:
+
+            self.bg_x1 -= self.speed
+            self.bg_x2 -= self.speed
+
+            if self.bg_x1 <= -self.ground_width:
+                self.bg_x1 = self.ground_width
+            if self.bg_x2 <= -self.ground_width:
+                self.bg_x2 = self.ground_width
+
             self.dino.update()
             self.enemys.update()
             self.cloud.update()
@@ -93,6 +108,7 @@ class Game(Scene):
                 offset_x = self.dino.rect.x - enemy.rect.x
                 offset_y = self.dino.rect.y - enemy.rect.y
                 if enemy.mask.overlap(self.dino.mask, (offset_x, offset_y)):
+                    self.dino.image = pygame.transform.scale(self.dino.frames[5], (self.dino.size, self.dino.size))
                     self.game_over = True
                     pygame.time.set_timer(self.CLOCK_EVENT, 0)
                     pygame.time.set_timer(self.CLOUD_SPAWN_EVENT, 0)
@@ -115,13 +131,17 @@ class Game(Scene):
         #     self.gameOver.run()
 
     def draw(self):
+        # self.screen.blit(self.ground, (0, (self.HEIGTH/2)+self.dino.size-20))
+        self.screen.blit(self.ground, (self.bg_x1, (self.HEIGTH/2)+self.dino.size-20))
+        self.screen.blit(self.ground, (self.bg_x2, (self.HEIGTH/2)+self.dino.size-20))
+
         self.text_screen(f"{self.clock_time}",self.BLACK,5,5)
         self.dino.draw()
         self.enemys.draw(self.screen)
         self.cloud.draw(self.screen)
         # for enemy in self.cactus:
         #     enemy.draw()
-        pygame.draw.line(self.screen, self.BLACK, (0, (self.HEIGTH/2)+self.dino.size),(self.WIDTH, (self.HEIGTH/2)+self.dino.size),2)
+        # pygame.draw.line(self.screen, self.BLACK, (0, (self.HEIGTH/2)+self.dino.size),(self.WIDTH, (self.HEIGTH/2)+self.dino.size),2)
 
         if self.game_over:
             # self.text_screen("Game Over",self.BLACK, self.WIDTH/2, self.HEIGTH/2, True)
